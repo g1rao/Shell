@@ -1,0 +1,139 @@
+uninstall java
+dpkg-query -W -f='${binary:Package}\n' | grep -E -e '^(ia32-)?(sun|oracle)-java' -e '^openjdk-' -e '^icedtea' -e '^(default|gcj)-j(re|dk)' -e '^gcj-(.*)-j(re|dk)' -e '^java-common' | xargs  apt-get -y purge
+
+
+strace -e trace=read -fp 9989 2>&1 | grep -Eow 'read\([0-9]+, "\S+",'
+
+
+
+javascript:document.body.contentEditable='true'; document.designMode='on'; void 0
+
+Jenkins:
+	Jenkins logs: /var/log/jenkins/jenkins.log
+	Jenkins Configuration: /etc/sysconfig/jenkins
+	Jenkins startup script: /etc/init.d/jenkins
+	To reload environments: systemctl daemon-reload
+	
+	
+	
+Apache:
+
+	apt-get install -y apache2
+	apt-get install -y libapache2-mod-wsgi
+	a2dissite 000-default.conf
+	a2enmod wsgi
+	touch /etc/apache2/sites-available/sandboxmonitor.conf
+			<VirtualHost *:5000>
+				   # The ServerName directive sets the request scheme, hostname and port that
+				   # the server uses to identify itself. This is used when creating
+				   # redirection URLs. In the context of virtual hosts, the ServerName
+				   # specifies what hostname must appear in the request's Host: header to
+				   # match this virtual host. For the default virtual host (this file) this
+				   # value is not decisive as it is used as a last resort host regardless.
+				   # However, you must set it for any further virtual host explicitly.
+				   #ServerName www.example.com
+
+				   ServerAdmin sdl35678.labs.teradata.com
+				   SetEnv ODBCINI /opt/teradata/client/ODBC_64/odbc.ini
+				   SetEnv ODBCINST /opt/teradata/client/ODBC_64/odbcinst.ini
+				   SetEnv LD_LIBRARY_PATH /opt/teradata/client/16.20/lib64
+				   WSGIDaemonProcess sandboxmonitor user=www-data group=www-data threads=5 maximum-requests=10000 python-path=/usr/local/lib/python2.7/dist-packages
+				   WSGIScriptAlias / /var/www/sandboxmonitor/sandboxmonitor.wsgi
+				   <Directory /var/www/sandboxmonitor>
+					WSGIProcessGroup sandboxmonitor
+					WSGIApplicationGroup %{GLOBAL}
+					Order deny,allow
+					Allow from all
+					Require all granted
+				   </Directory>
+			</VirtualHost>
+
+	touch /va/www/sandboxmonitor/sandboxmonitor.wsgi
+				import sys,os
+				#sys.path.insert(0,'/var/www/html/Queue_Tracker')
+
+				#current_dir =  os.path.abspath(os.path.dirname(__file__))
+
+				sys.path.insert(0,'/var/www/sandboxmonitor')
+
+
+				from server import app as application
+
+	sudo a2ensite sandboxmonitor.conf
+
+
+	sudo vi /etc/apache2/ports.conf
+			Listen 5000
+			
+			
+apt-get update
+apt-cache madison curl
+apt-get install -y apt-transport-https ca-certificates curl software-properties-common git vim openssh-server
+adduser nagios
+ssh-copy-id -i ~/.ssh/id_rsa.pub nagios@client_IP
+
+
+echo "root:rootroot" | chpasswd
+echo 'rootroot' |passwd root --stdin
+
+
+useradd nagios
+/etc/sudoers
+nagios ALL=(ALL) NOPASSWD: ALL
+cd /tmp
+curl -O https://nagios-plugins.org/download/nagios-plugins-2.2.1.tar.gz
+https://nagios-plugins.org/download/nagios-plugins-2.2.1.tar.gz
+https://nagios-plugins.org/download/nagios-plugins-2.1.4.tar.gz
+tar -xvzf nagios-plugins-2.2.1.tar.gz
+cd nagios-plugins-2.2.1/
+sudo ./configure
+sudo make
+sudo make install
+JENKINS_JAVA_OPTIONS="-XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent -XX:+ParallelRefProcEnabled -XX:+UseStringDeduplication -XX:+UnlockExperimentalVMOptions -XX:G1NewSizePercent=20 -XX:+UnlockDiagnosticVMOptions -XX:G1SummarizeRSetStatsPeriod=1 -Djava.awt.headless=truei -Dorg.jenkinsci.plugins.durabletask.BourneShellScript.HEARTBEAT_CHECK_INTERVAL=86400
+ -Xmx1048m
+ 
+ 
+
+
+
+	
+	
+	useradd -m nagios; (echo nagios; echo nagios) | passwd nagios
+	sed -i '42i nagios ALL=(ALL) NOPASSWD: ALL' /etc/sudoers
+	
+println System.getenv("JAVA_OPTS")
+def JAVA_OPTS="ASDD"
+println(JAVA_OPTS)
+println System.getenv("JAVA_OPTS")
+println(manager.build.getEnvironment(listener).get('JAVA_OPTS'))
+
+
+
+
+netstat -anp tcp | grep LISTEN
+
+
+ curl -u admin:admin -T file.txt -H "X-Checksum-md5:622f1553e3fe927e2c8259546f2591b6" -H  "X-Checksum-sha1:cf3c7d5587ec90bef8b955f99b705ab7d06e332a" "http://artifactory:8040/artifactory/reponame/path/" -i
+ 
+ edit /etc/ansible/hosts
+
+ansible all -m shell -a 'echo $TERM'
+ansible all -m ping
+ansible all -a "/bin/echo hello"
+ansible all -a "/usr/bin/python"
+ansible all -m shell -a 'python asdfla.py'	
+ansible all -m ping -i "host1,"
+
+
+
+
+
+ldapsearch -H ldap://ldap.abc.company.com -W -x -D "cn=username,OU=APJ,OU=User Accounts,DC=abc,DC=company,DC=com" -b "DC=abc,DC=company,DC=com" "(samAccountName=username)"
+ldapsearch domain="ldap://ldap.abc.company.com" search="(&(objectClass=group)(cn=admin))" | ldapgroup
+
+(&(objectClass=user)(sAMAccountName=username)
+  (memberof=CN=SOCAL,OU=Users,DC=abc,DC=company,DC=com))
+  
+  
+ldapsearch -H ldap://ldap.company.com -W -x -D "cn=username,OU=APJ,OU=User Accounts,DC=td,DC=company,DC=com" -b "DC=abc,DC=company,DC=com" "(&(objectCategory=person)(memberOf= CN=socal,OU=Groups,DC=abc,DC=company,DC=COM))"
+
