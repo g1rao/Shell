@@ -6,11 +6,10 @@ spawn ssh $input
 
 while 1 {
     expect {
-        "Enter PIN for 'PIV_II (PIV Card Holder pin)':" { send "key\r" }
-                "$ " {send "\r"}
+        "Enter PIN for 'PIV_II (PIV Card Holder pin)':" { send "3BZHWKXG\r" }
+		"$ " {send "\r"}
     }
     incr count
     if { $count == 3 } break
 }
-
 interact
