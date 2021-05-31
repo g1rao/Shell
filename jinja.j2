@@ -1,0 +1,27 @@
+[
+    {% for host in play_hosts %}
+    {
+        'CPU': {{ hostvars[host]['cpu_percent']['stdout'] }},
+        'Memory': {{ ((hostvars[host]['ansible_memtotal_mb'] - hostvars[host]['ansible_memfree_mb'])*100/hostvars[host]['ansible_memtotal_mb']) | round(2)  }},
+        'SWAP': {{ ((hostvars[host]['ansible_swaptotal_mb'] - hostvars[host]['ansible_swapfree_mb'])*100/hostvars[host]['ansible_swaptotal_mb']) | round(2) }},
+        'Hostname': {{ hostvars[host]['ansible_fqdn']}} / {{ host }}
+    },
+    {% endfor %}
+]
+
+<table id="tbody">
+<tr><th> Instance Name/IP </th><th> CPU </th><th> Memory </th><th> SWAP </th></tr>
+{% for host in play_hosts %}
+    {% set cpu =  {{ hostvars[host]['cpu_percent']['stdout'] }} %}
+    {% set memory = {{ ((hostvars[host]['ansible_memtotal_mb'] - hostvars[host]['ansible_memfree_mb'])*100/hostvars[host]['ansible_memtotal_mb']) | round(2)  }} %}
+    {% set swap = {{ ((hostvars[host]['ansible_swaptotal_mb'] - hostvars[host]['ansible_swapfree_mb'])*100/hostvars[host]['ansible_swaptotal_mb']) | round(2) }} %}
+    {% set hostname = {{ hostvars[host]['ansible_fqdn']}} / {{ host }} %}
+    <tr><td>{{hostname}}</td>
+    <td {% if cpu >= urgent %} class="{{urgent_color}}" {% elif cpu >= warning %} class="{{warning_color}}" {% if cpu >= alert %} class="{{alert_color}}"   {% endif %}>{{cpu}}</td>
+    <td {% if memory >= urgent %} class="{{urgent_color}}" {% elif memory >= warning %} class="{{warning_color}}" {% if memory >= alert %} class="{{alert_color}}"   {% endif %}>{{memory}}</td>
+    <td {% if swap >= urgent %} class="{{urgent_color}}" {% elif swap >= warning %} class="{{warning_color}}" {% if swap >= alert %} class="{{alert_color}}"   {% endif %}>{{swap}}</td>
+    </tr>
+{% endfor %}
+</table>
+
+
